@@ -1,6 +1,0 @@
-parser: babel-eslint
-extends: standard
-env:
-  browser: true
-plugins:
-  - flowtype
