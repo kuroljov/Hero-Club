@@ -29,7 +29,7 @@
 </template>
 
 <script>
-  import { mapMutations } from 'vuex'
+  import { mapActions } from 'vuex'
   import heroes from '../lib/heroes'
   import { Player } from '../lib/api'
 
@@ -39,10 +39,16 @@
       name: null,
       hero: null
     }),
+    beforeMount () {
+      if (this.$store.getters['me/isLoggedIn']) {
+        this.goHome()
+      }
+    },
     methods: {
-      ...mapMutations('me', {
-        setupMe: 'setup'
-      }),
+      ...mapActions('me', ['addInfo', 'createPlayer']),
+      goHome () {
+        this.$router.push({ name: 'Home' })
+      },
       pickHero (type: string) {
         this.hero = heroes[type]
       },
@@ -53,21 +59,16 @@
           return
         }
 
-        const player = await Player.findById(this.name)
+        const player = await Player.findById(name)
 
         if (player) {
           console.log('Player with this name exists')
           return
         }
 
-        const me = await Player.create({
-          name: this.name,
-          hero: this.hero
-        })
+        await this.createPlayer({ name, hero })
 
-        this.setupMe(me)
-
-        this.$router.push({ name: 'Home' })
+        this.goHome()
       }
     }
   }

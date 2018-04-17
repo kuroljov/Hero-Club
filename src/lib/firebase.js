@@ -9,6 +9,7 @@ const config = {
   messagingSenderId: '1057391921941'
 }
 
+export { firebase }
 export const app = firebase.initializeApp(config)
 export const db = app.database()
 export const $players = db.ref('players')

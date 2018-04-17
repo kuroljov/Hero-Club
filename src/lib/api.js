@@ -4,6 +4,7 @@ import { db } from './firebase'
 import type { Hero } from './heroes'
 
 type PlayerCreate = {
+  id: string,
   name: string,
   hero: Hero
 }
@@ -19,9 +20,10 @@ export const Player = {
       })
   }),
   create (args: PlayerCreate) {
-    const ref = `players/${args.name}`
+    const ref = `players/${args.id}`
 
     const hero = {
+      id: args.id,
       name: args.name,
       hero: args.hero,
       createdAt: Date.now()
