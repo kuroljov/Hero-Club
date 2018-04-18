@@ -54,7 +54,7 @@
           return
         }
 
-        const player = await api.players.findOneById(name)
+        const player = await api.players.findOneByName(name)
 
         if (player) {
           console.log('Player with this name exists')

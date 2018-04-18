@@ -1,7 +1,7 @@
 // @flow
 
 import { db } from './firebase'
-import type { Hero } from './heroes'
+import type { Hero } from '../types/Hero'
 
 type PlayerCreate = {
   id: string,
@@ -32,6 +32,17 @@ export default {
 
       return db
         .ref(ref)
+        .once('value', (snapshot) => {
+          resolve(snapshot.val())
+        })
+    }),
+    findOneByName: (name: string) => new Promise((resolve, reject) => {
+      const ref = 'players'
+
+      return db
+        .ref(ref)
+        .orderByChild('name')
+        .equalTo(name)
         .once('value', (snapshot) => {
           resolve(snapshot.val())
         })
