@@ -37,7 +37,7 @@ export default {
       commit('addInfo', me)
     },
     meWannaBattle ({ getters, commit }: Object, either: boolean) {
-      return api.players.wannaBattle(getters.me.id, true)
+      return api.players.wannaBattle(getters.me.id, either)
         .then(() => {
           commit('meWannaBattle', either)
         })
