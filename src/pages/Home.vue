@@ -1,55 +1,35 @@
 <template>
   <section>
-    <h1>Home</h1>
-    <button @click="battle">Go Battle</button>
+    <h1>{{ me.name }}</h1>
+    <hr>
+    <h3>{{ me.hero.type }}</h3>
+    <h3>Health: {{ me.hero.health }}</h3>
+    <h3>Damage: {{ me.hero.damage.join('-') }}</h3>
+    <button @click="battle">Wanna Battle</button>
   </section>
 </template>
 
 <script>
-  import { mapGetters } from 'vuex'
-  import { db } from '../lib/firebase'
+  import { mapActions, mapGetters } from 'vuex'
+  import api from '../lib/api'
 
   export default {
     name: 'Home',
-    data: () => ({
-      notBusy: []
-    }),
-    mounted () {
-      this.findOpponents()
-    },
     computed: {
-      ...mapGetters('me', {
-        myId: 'id'
-      })
+      ...mapGetters('me', ['me'])
     },
     methods: {
-      findOpponents () {
-        db
-          .ref('players')
-          .orderByChild('isBusy')
-          .equalTo(false)
-          .once('value', (snapshot) => {
-            const players: Object = snapshot.val()
+      ...mapActions('me', ['meWannaBattle']),
+      async battle () {
+        const battlers = await api.players.whoWannaBattle()
 
-            if (!players) {
-              return
-            }
+        if (!battlers.length) {
+          // if not - then set me.wannaBattle to true
+          return this.meWannaBattle(true)
+        }
 
-            this.notBusy = Object
-              .keys(players)
-              .reduce((acc: Array<Object>, playerId: string) => {
-                const player = players[playerId]
-
-                acc.push(player)
-
-                return acc
-              }, [])
-              .filter(player => player.id !== this.myId)
-          })
-      },
-      battle () {
-        // get one available player from firebase
-        // setup a battle with him
+        // if found anyone - then go battle with him
+        console.log(battlers)
       }
     }
   }

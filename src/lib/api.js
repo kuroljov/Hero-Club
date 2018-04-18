@@ -2,6 +2,7 @@
 
 import { db } from './firebase'
 import type { Hero } from '../types/Hero'
+import obj2arr from './obj2arr'
 
 type PlayerCreate = {
   id: string,
@@ -46,6 +47,24 @@ export default {
         .once('value', (snapshot) => {
           resolve(snapshot.val())
         })
-    })
+    }),
+    whoWannaBattle: () => new Promise((resolve, reject) => {
+      const ref = 'players'
+
+      return db
+        .ref(ref)
+        .orderByChild('wannaBattle')
+        .equalTo(true)
+        .once('value', (snapshot) => {
+          resolve(obj2arr(snapshot.val()))
+        })
+    }),
+    wannaBattle (id: string, either: boolean) {
+      const ref = `players/${id}/wannaBattle`
+
+      return db
+        .ref(ref)
+        .set(either)
+    }
   }
 }
