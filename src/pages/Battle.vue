@@ -1,37 +1,65 @@
 <template>
-  <section v-if="!loading">
-    <div v-if="battle.isComplete">
+  <section v-if="!loading" class="battle">
+    <div v-if="battle.isComplete" class="battle-end">
       <h1>{{ winMessage }}</h1>
       <button @click="goHome">Go Home</button>
     </div>
-    <div v-else>
-      <h1>You are battling with {{ opponent.name }}</h1>
+    <div v-else class="battlefield">
+      <header class="header">
+        <h1 class="versus">Versus {{ opponent.name }}</h1>
+        <p class="opponent-health">{{ opponentHealth }}</p>
+      </header>
 
-      <h3>Your Health: {{ myHealth }}/{{ me.hero.health }}</h3>
-      <h3>His Health: {{ opponentHealth }}/{{ opponent.hero.health }}</h3>
-
-      <h3>What to attack</h3>
-      <ul>
-        <li
-          v-for="part in parts"
-          :class="part === attack ? 'active' : ''"
-          @click="attack = part"
-        >{{ part }}</li>
-      </ul>
-
-      <h3>What to defend</h3>
-      <ul>
-        <li
-          v-for="part in parts"
-          :class="part === defend ? 'active' : ''"
-          @click="defend = part"
-        >{{ part }}</li>
-      </ul>
-
-      <div>
-        <p v-if="myHitsCount > opponentHitsCount">Waiting for {{ opponent.name }} to Hit</p>
-        <button v-else @click="commit">Commit</button>
+      <div class="row">
+        <div class="col">
+          <div class="label-value">
+            <p class="label">Health</p>
+            <p class="value health">{{ myHealth }}</p>
+          </div>
+        </div>
+        <div class="col">
+          <div class="label-value">
+            <p class="label">Damage</p>
+            <p class="value">{{ me.hero.damage.join('-') }}</p>
+          </div>
+        </div>
       </div>
+
+      <h3>Attack</h3>
+
+      <div class="row">
+        <div
+          class="col"
+          v-for="part in parts"
+          @click="attack = part"
+          :class="part === attack ? 'active' : ''"
+        >
+          <div class="part">
+            <p class="part-name">{{ part }}</p>
+          </div>
+        </div>
+      </div>
+
+      <h3>Defend</h3>
+
+      <div class="row">
+        <div
+          class="col"
+          v-for="part in parts"
+          @click="defend = part"
+          :class="part === defend ? 'active' : ''"
+        >
+          <div class="part">
+            <p class="part-name">{{ part }}</p>
+          </div>
+        </div>
+      </div>
+
+      <v-action-button
+        :icon="axeIcon"
+        :disabled="myHitsCount > opponentHitsCount"
+        @click.native="commit"
+        ></v-action-button>
     </div>
   </section>
 </template>
@@ -43,6 +71,7 @@
   import { db } from '../lib/firebase'
   import obj2arr from '../lib/obj2arr'
   import loading from '../lib/loading'
+  import axeIcon from '../assets/axe.svg'
 
   export default {
     name: 'Battle',
@@ -62,6 +91,7 @@
       }
     },
     computed: {
+      axeIcon: () => axeIcon,
       ...mapGetters('me', ['me']),
       winner () {
         return this.battle.winnerId === this.me.id ? this.me : this.opponent
@@ -191,6 +221,11 @@
         db.ref(`players/${this.opponent.id}/battleId`).set(null)
       },
       commit () {
+        if (!this.attack || !this.defend) {
+          alert('Choose attack and defend')
+          return
+        }
+
         db
           .ref(`battles/${this.battle.id}/hits/${this.me.id}`)
           .push({
@@ -209,5 +244,57 @@
 <style scoped>
   .active {
     font-weight: bold;
+  }
+  .battle {
+    text-align: center;
+  }
+  .row {
+    display: flex;
+    justify-content: space-between;
+  }
+  .col {
+    flex: 1;
+  }
+  .part {
+    text-align: center;
+    margin: 1rem 0;
+  }
+  .active {
+    background: #f5f5f5;
+  }
+  .part-name {
+    margin: 0;
+  }
+  .row {
+    margin-bottom: 2rem;
+  }
+  .health {
+    color: #E91E63;
+  }
+  .value {
+    font-size: 1.4rem;
+  }
+  .opponent-health {
+    margin: 0;
+    margin-top: -1.5rem;
+    color: #E91E63;
+    font-size: 1.2rem;
+  }
+  .header {
+    margin-bottom: 1rem;
+  }
+  .battle-end {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  button {
+    background: white;
+    border: none;
+    outline: none;
+    font-size: .8rem;
+    text-transform: uppercase;
+    padding: .4rem;
   }
 </style>
