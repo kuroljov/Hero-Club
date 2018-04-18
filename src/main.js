@@ -33,6 +33,24 @@ firebase.auth().onAuthStateChanged((user) => {
       store.dispatch('me/addInfo', { ...me })
 
       if (me) {
+        firebase
+          .database()
+          .ref(`players/${me.id}/battleId`)
+          .on('value', (snapshot) => {
+            const battleId = snapshot.val()
+
+            if (!battleId) {
+              return
+            }
+
+            app.$router.push({
+              name: 'Battle',
+              params: {
+                battleId
+              }
+            })
+          })
+
         app.$router.push({ name: 'Home' })
       } else {
         app.$router.push({ name: 'HeroPick' })

@@ -44,6 +44,8 @@ export default {
         .then((battleInfo) => {
           commit('setBattle', battleInfo)
           commit('setOpponent', battle.opponent)
+
+          return battleInfo
         })
     }
   }

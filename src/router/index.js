@@ -17,7 +17,7 @@ export default new Router({
     name: 'Home',
     component: Home
   }, {
-    path: '/battle',
+    path: '/battle/:battleId',
     name: 'Battle',
     component: Battle
   }]

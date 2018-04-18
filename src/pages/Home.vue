@@ -12,6 +12,7 @@
 <script>
   import { mapActions, mapGetters } from 'vuex'
   import api from '../lib/api'
+  import { db } from '../lib/firebase'
 
   export default {
     name: 'Home',
@@ -28,11 +29,19 @@
           return this.meWannaBattle(true)
         }
 
-        const firstBattler = battlers[0]
+        const opponent = battlers[0]
 
-        await this.createBattle({
-          opponent: firstBattler
+        const battle = await this.createBattle({
+          opponent
         })
+
+        db
+          .ref(`players/${this.me.id}/battleId`)
+          .set(battle.id)
+
+        db
+          .ref(`players/${opponent.id}/battleId`)
+          .set(battle.id)
       }
     }
   }

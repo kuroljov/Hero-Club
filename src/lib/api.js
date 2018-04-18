@@ -19,6 +19,15 @@ type BattleCreate = {
 
 export default {
   battle: {
+    findOneById: (id: string) => new Promise((resolve, reject) => {
+      const ref = `battles/${id}`
+
+      return db
+        .ref(ref)
+        .once('value', (snapshot) => {
+          resolve(snapshot.val())
+        })
+    }),
     createOne (args: BattleCreate) {
       const id = new UId()
       const ref = `battles/${id.id}`
