@@ -39,11 +39,6 @@
       name: null,
       hero: null
     }),
-    beforeMount () {
-      if (this.$store.getters['me/isLoggedIn']) {
-        this.goHome()
-      }
-    },
     methods: {
       ...mapActions('me', ['addInfo', 'createPlayer']),
       goHome () {

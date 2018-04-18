@@ -19,8 +19,10 @@ export default {
     me: {}
   },
   getters: {
-    me: (state: State) => state.me,
-    isLoggedIn: (state: State) => state.me.name && state.me.hero
+    id: (state: State) => state.me.id,
+    name: (state: State) => state.me.name,
+    hero: (state: State) => state.me.hero,
+    isLoggedIn: (state: State) => !!state.me.name && !!state.me.hero
   },
   mutations: {
     addInfo (state: State, info: Object) {
