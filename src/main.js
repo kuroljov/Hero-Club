@@ -51,7 +51,16 @@ firebase.auth().onAuthStateChanged((user) => {
             })
           })
 
-        app.$router.push({ name: 'Home' })
+        if (me.battleId) {
+          app.$router.push({
+            name: 'Battle',
+            params: {
+              battleId: me.battleId
+            }
+          })
+        } else {
+          app.$router.push({ name: 'Home' })
+        }
       } else {
         app.$router.push({ name: 'HeroPick' })
       }

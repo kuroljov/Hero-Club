@@ -35,13 +35,11 @@
           opponent
         })
 
-        db
-          .ref(`players/${this.me.id}/battleId`)
-          .set(battle.id)
+        db.ref(`players/${this.me.id}/battleId`).set(battle.id)
+        db.ref(`players/${opponent.id}/battleId`).set(battle.id)
 
-        db
-          .ref(`players/${opponent.id}/battleId`)
-          .set(battle.id)
+        db.ref(`players/${this.me.id}/wannaBattle`).set(false)
+        db.ref(`players/${opponent.id}/wannaBattle`).set(false)
       }
     }
   }
