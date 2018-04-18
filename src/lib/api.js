@@ -3,14 +3,39 @@
 import { db } from './firebase'
 import type { Hero } from '../types/Hero'
 import obj2arr from './obj2arr'
+import type { Id } from '../types/Id'
 
 type PlayerCreate = {
-  id: string,
+  id: Id,
   name: string,
   hero: Hero,
 }
 
+type BattleCreate = {
+  id: Id,
+  players: [Id, Id]
+}
+
 export default {
+  battle: {
+    createOne (args: BattleCreate) {
+      const ref = `battles/${args.id}`
+
+      const battle = {
+        id: args.id,
+        players: args.players,
+        winner: null,
+        loser: null,
+        isComplete: false,
+        createdAt: Date.now()
+      }
+
+      return db
+        .ref(ref)
+        .set({ ...battle })
+        .then(() => battle)
+    }
+  },
   players: {
     createOne (args: PlayerCreate) {
       const ref = `players/${args.id}`
@@ -20,7 +45,8 @@ export default {
         name: args.name,
         hero: args.hero,
         createdAt: Date.now(),
-        wannaBattle: false
+        wannaBattle: false,
+        battleId: null
       }
 
       return db
