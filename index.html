@@ -10,6 +10,7 @@
     <!--[if IE]><link rel="shortcut icon" href="/static/img/icons/favicon.ico"><![endif]-->
     <!-- Add to home screen for Android and modern mobile browsers -->
     <link rel="manifest" href="<%= htmlWebpackPlugin.files.publicPath %>static/manifest.json">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css">
     <meta name="theme-color" content="#4DBA87">
 
     <!-- Add to home screen for Safari on iOS -->
@@ -30,6 +31,29 @@
     <noscript>
       This is your fallback content in case JavaScript fails to load.
     </noscript>
+
+    <style>
+      .loading {
+        position: fixed;
+        width: 100%;
+        height: 100vh;
+        display: flex;
+        margin: 0;
+        padding: 0;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+      }
+      .title {
+        font-size: 2rem;
+      }
+    </style>
+
+    <div class="loading" id="loading">
+      <p class="title">Loading</p>
+      <p>The World, Opponents, Everything</p>
+    </div>
+
     <div id="app"></div>
     <!-- Todo: only include in production -->
     <%= htmlWebpackPlugin.options.serviceWorkerLoader %>

@@ -5,13 +5,12 @@ import router from './router'
 import store from './store'
 import { firebase } from './lib/firebase'
 
-import 'normalize.css'
 import { Player } from './lib/api'
+import loading from './lib/loading'
 
 Vue.config.productionTip = false
 
 const app = new Vue({
-  el: '#app',
   router,
   store,
   components: {
@@ -35,14 +34,15 @@ firebase.auth().onAuthStateChanged((user) => {
     .then((me) => {
       store.dispatch('me/addInfo', { ...me })
 
-      app.$mount('#app')
-
       if (me) {
         app.$router.push({ name: 'Home' })
-        return
+      } else {
+        app.$router.push({ name: 'HeroPick' })
       }
 
-      app.$router.push({ name: 'HeroPick' })
+      app.$mount('#app')
+
+      loading.hide()
     })
     .catch(console.error)
 })
