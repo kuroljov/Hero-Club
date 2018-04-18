@@ -1,8 +1,10 @@
 // @flow
 
 import { db } from './firebase'
-import type { Hero } from '../types/Hero'
 import obj2arr from './obj2arr'
+import UId from './Id'
+
+import type { Hero } from '../types/Hero'
 import type { Id } from '../types/Id'
 
 type PlayerCreate = {
@@ -12,17 +14,17 @@ type PlayerCreate = {
 }
 
 type BattleCreate = {
-  id: Id,
   players: [Id, Id]
 }
 
 export default {
   battle: {
     createOne (args: BattleCreate) {
-      const ref = `battles/${args.id}`
+      const id = new UId()
+      const ref = `battles/${id.id}`
 
       const battle = {
-        id: args.id,
+        id: id.id,
         players: args.players,
         winner: null,
         loser: null,

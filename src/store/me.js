@@ -4,7 +4,7 @@ import api from '../lib/api'
 import type { Player } from '../types/Player'
 
 type State = {
-  me: Player
+  me: Player,
 }
 
 export default {

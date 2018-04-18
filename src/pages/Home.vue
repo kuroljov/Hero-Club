@@ -20,16 +20,19 @@
     },
     methods: {
       ...mapActions('me', ['meWannaBattle']),
+      ...mapActions('battle', ['createBattle']),
       async battle () {
         const battlers = await api.players.whoWannaBattle()
 
         if (!battlers.length) {
-          // if not - then set me.wannaBattle to true
           return this.meWannaBattle(true)
         }
 
-        // if found anyone - then go battle with him
-        console.log(battlers)
+        const firstBattler = battlers[0]
+
+        await this.createBattle({
+          opponent: firstBattler
+        })
       }
     }
   }

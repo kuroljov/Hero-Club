@@ -3,6 +3,7 @@ import Router from 'vue-router'
 
 import HeroPick from '../pages/HeroPick'
 import Home from '../pages/Home'
+import Battle from '../pages/Battle'
 
 Vue.use(Router)
 
@@ -15,5 +16,9 @@ export default new Router({
     path: '/home',
     name: 'Home',
     component: Home
+  }, {
+    path: '/battle',
+    name: 'Battle',
+    component: Battle
   }]
 })
