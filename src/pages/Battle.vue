@@ -155,6 +155,9 @@
         return
       }
 
+      db.ref(`players/${this.me.id}/wannaBattle`).set(false)
+      db.ref(`players/${opponent.id}/wannaBattle`).set(false)
+
       db
         .ref(`battles/${battleId}`)
         .on('value', (snapshot) => {
