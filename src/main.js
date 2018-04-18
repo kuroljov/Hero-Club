@@ -28,8 +28,6 @@ firebase.auth().onAuthStateChanged((user) => {
 
   const id = user.uid
 
-  store.dispatch('me/addInfo', { id })
-
   api.players.findOneById(id)
     .then((me) => {
       store.dispatch('me/addInfo', { ...me })
