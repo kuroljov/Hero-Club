@@ -5,10 +5,14 @@ import router from './router'
 import store from './store'
 import { firebase } from './lib/firebase'
 
+import ActionButton from './components/ActionButton'
+
 import api from './lib/api'
 import loading from './lib/loading'
 
 Vue.config.productionTip = false
+
+Vue.component('v-action-button', ActionButton)
 
 const app = new Vue({
   router,
@@ -27,6 +31,8 @@ firebase.auth().onAuthStateChanged((user) => {
   }
 
   const id = user.uid
+
+  store.commit('me/addInfo', { id })
 
   api.players.findOneById(id)
     .then((me) => {
