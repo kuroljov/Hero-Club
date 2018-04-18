@@ -1,11 +1,6 @@
 // @flow
 
-export type Hero = {
-  type: 'Barb' | 'Sorc',
-  health: number,
-  defence: number,
-  damage: [number, number]
-}
+import type { Hero } from '../types/Hero'
 
 const Barb: Hero = {
   type: 'Barb',

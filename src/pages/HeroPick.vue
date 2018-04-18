@@ -31,7 +31,7 @@
 <script>
   import { mapActions } from 'vuex'
   import heroes from '../lib/heroes'
-  import { Player } from '../lib/api'
+  import api from '../lib/api'
 
   export default {
     name: 'HeroPick',
@@ -54,7 +54,7 @@
           return
         }
 
-        const player = await Player.findById(name)
+        const player = await api.players.findOneById(name)
 
         if (player) {
           console.log('Player with this name exists')

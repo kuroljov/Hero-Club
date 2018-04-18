@@ -1,15 +1,10 @@
 // @flow
 
-import { Player } from '../lib/api'
-import type { Hero } from '../lib/heroes'
+import api from '../lib/api'
+import type { Player } from '../types/Player'
 
 type State = {
-  me: {
-    id: string,
-    name: string,
-    hero: Hero,
-    createdAt: number,
-  }
+  me: Player
 }
 
 export default {
@@ -22,6 +17,7 @@ export default {
     id: (state: State) => state.me.id,
     name: (state: State) => state.me.name,
     hero: (state: State) => state.me.hero,
+    isBusy: (state: State) => state.me.isBusy,
     isLoggedIn: (state: State) => !!state.me.name && !!state.me.hero
   },
   mutations: {
@@ -36,7 +32,7 @@ export default {
     async createPlayer ({ commit, state }: Object, { name, hero }: Object) {
       const id = state.me.id
 
-      const me = await Player.create({ id, name, hero })
+      const me = await api.players.createOne({ id, name, hero })
 
       commit('addInfo', me)
     }

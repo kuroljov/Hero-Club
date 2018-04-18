@@ -5,7 +5,7 @@ import router from './router'
 import store from './store'
 import { firebase } from './lib/firebase'
 
-import { Player } from './lib/api'
+import api from './lib/api'
 import loading from './lib/loading'
 
 Vue.config.productionTip = false
@@ -30,7 +30,7 @@ firebase.auth().onAuthStateChanged((user) => {
 
   store.dispatch('me/addInfo', { id })
 
-  Player.findById(id)
+  api.players.findOneById(id)
     .then((me) => {
       store.dispatch('me/addInfo', { ...me })
 
