@@ -76,6 +76,7 @@
   import obj2arr from '../lib/obj2arr'
   import loading from '../lib/loading'
   import axeIcon from '../assets/axe.svg'
+  import calcDamage from '../lib/calcDamage'
 
   export default {
     name: 'Battle',
@@ -124,7 +125,7 @@
             }
 
             if (op.attack !== me.defend) {
-              health -= this.opponent.hero.damage[0]
+              health -= calcDamage(this.opponent.hero)
             }
 
             return health
@@ -147,7 +148,7 @@
             }
 
             if (me.attack !== op.defend) {
-              health -= this.me.hero.damage[0]
+              health -= calcDamage(this.me.hero)
             }
 
             return health
