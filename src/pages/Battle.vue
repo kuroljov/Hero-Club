@@ -1,8 +1,12 @@
 <template>
   <section v-if="!loading" class="battle">
     <div v-if="battle.isComplete" class="battle-end">
-      <h1>{{ winMessage }}</h1>
-      <button @click="goHome">Go Home</button>
+      <div class="header">
+        <h1 :class="winner.id === me.id ? 'green' : 'red'">{{ winMessage }}</h1>
+      </div>
+      <div class="actions">
+        <button @click="goHome">Go Home</button>
+      </div>
     </div>
     <div v-else class="battlefield">
       <header class="header">
@@ -288,13 +292,20 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-direction: column;
   }
   button {
     background: white;
-    border: none;
+    border: 1px solid #ddd;
     outline: none;
     font-size: .8rem;
     text-transform: uppercase;
     padding: .4rem;
+  }
+  .green {
+    color: #4CAF50;
+  }
+  .red {
+    color: #F44336;
   }
 </style>

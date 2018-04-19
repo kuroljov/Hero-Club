@@ -3,11 +3,10 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import store from './store'
-import { firebase } from './lib/firebase'
+import { db, firebase } from './lib/firebase'
 
 import ActionButton from './components/ActionButton'
 
-import api from './lib/api'
 import loading from './lib/loading'
 
 Vue.config.productionTip = false
@@ -34,46 +33,31 @@ firebase.auth().onAuthStateChanged((user) => {
 
   store.commit('me/addInfo', { id })
 
-  api.players.findOneById(id)
-    .then((me) => {
-      store.dispatch('me/addInfo', { ...me })
+  db
+    .ref(`players/${id}`)
+    .on('value', (snapshot) => {
+      const me = snapshot.val()
 
-      if (me) {
-        firebase
-          .database()
-          .ref(`players/${me.id}/battleId`)
-          .on('value', (snapshot) => {
-            const battleId = snapshot.val()
-
-            if (!battleId) {
-              return
-            }
-
-            app.$router.push({
-              name: 'Battle',
-              params: {
-                battleId
-              }
-            })
-          })
-
-        if (me.battleId) {
-          app.$router.push({
-            name: 'Battle',
-            params: {
-              battleId: me.battleId
-            }
-          })
-        } else {
-          app.$router.push({ name: 'Home' })
-        }
-      } else {
+      if (!me) {
         app.$router.push({ name: 'HeroPick' })
+
+        app.$mount('#app')
+        loading.hide()
+        return
+      }
+
+      store.commit('me/addInfo', { ...me })
+
+      if (me.battleId) {
+        app.$router.push({
+          name: 'Battle',
+          params: {
+            battleId: me.battleId
+          }
+        })
       }
 
       app.$mount('#app')
-
       loading.hide()
     })
-    .catch(console.error)
 })

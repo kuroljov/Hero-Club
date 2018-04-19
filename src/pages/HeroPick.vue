@@ -29,7 +29,7 @@
 </template>
 
 <script>
-  import { mapActions } from 'vuex'
+  import { mapActions, mapGetters } from 'vuex'
   import heroes from '../lib/heroes'
   import api from '../lib/api'
   import arrowRightIcon from '../assets/arrow-right.svg'
@@ -44,6 +44,12 @@
       arrowRightIcon: () => arrowRightIcon,
       isDone () {
         return !!this.name && !!this.hero
+      },
+      ...mapGetters('me', ['isLoggedIn'])
+    },
+    created () {
+      if (this.isLoggedIn) {
+        this.goHome()
       }
     },
     methods: {
@@ -64,7 +70,7 @@
         const player = await api.players.findOneByName(name)
 
         if (player) {
-          console.log('Player with this name exists')
+          alert('Player with this name exists')
           return
         }
 
